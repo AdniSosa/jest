@@ -13,6 +13,7 @@ let id = 0; // declaramos una variable id con valor 0
 
 const resetProducts = () => {
     products = [];
+    id = 0;
 }
 
 const addProduct = (name, price) => {
@@ -51,6 +52,7 @@ const getProducts = () => {
     if(products.length === 0) {
         throw new Error ('There are no products to show')
     }
+    return products
 }
 
 const getProduct = (id) => {
@@ -64,31 +66,19 @@ const getProduct = (id) => {
 }
 
 const updateProduct = (id, name, price) => {
-    const product = products.filter(product => product.id === id);
     const index = products.findIndex(product => product.id === id)
 
-    if(product.length === 0) {
+    if(index === -1) {
         throw new Error ('This product hasn´t been found')
+    }
+    if(!name || !price) {
+        throw new Error ('Incomplete data.')
     }
     products[index].name = name;
     products[index].price = price
 
-    return product[0];
+    return products[index];
 }
-
-//addProduct('manzana', 2);
-//addProduct('pera', 3);
-//updateProduct(4, 'chinola', 5);
-//resetProducts();
-//console.log(getProducts());
-//console.log(getProduct(1));
-//removeProduct(3)
-//console.log(products);
-// resetProducts();
-// console.log(products);
-// console.log(id);
-
-//console.log(products);
 
 module.exports = {
     resetProducts,
