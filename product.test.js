@@ -22,16 +22,21 @@
 
 const { resetProducts,  addProduct, removeProduct, getProducts, getProduct, updateProduct} = require('./product');
 
+afterEach(() => {
+    resetProducts();
+});
+
 describe('addProduct', () => {
-    afterEach(() => {
-        resetProducts();
-    });
     
     it('Should add a product', () => {
         expect(addProduct('manzana', 2)).toEqual({id:1, name: 'manzana', price: 2})
     })
+    it('Should increment the id by 1', () => {
+        addProduct('manzana', 2)
+        expect(addProduct('pera', 3)).toEqual({id:2, name: 'pera', price: 3})
+    })
     it('Should throw an error if name is empty', () => {
-        expect(() => addProduct('', 2)).toThrow('Must be a name for the product')
+        expect(() => addProduct(null, 2)).toThrow('Must be a name for the product')
     })
     it('Should throw an error if price is empty', () => {
         expect(() => addProduct('manzana', null)).toThrow('Must be a price for the product')
@@ -43,22 +48,21 @@ describe('addProduct', () => {
 })
 
 describe('removeProduct', () => {
-    afterEach(() => {
-        resetProducts();
-    });
+    
     it('Should remove a product', () => {
         addProduct('manzana', 2);
-        expect(removeProduct(2)).toEqual([])
+        expect(removeProduct(1)).toEqual([])
     })
     it('Should throw an error if the product couldn´t been found', () => {
         expect(() => removeProduct(10)).toThrow('This product doesn´t exist')
     })
+    it('Should throw an error if the product couldn´t been erased', () => {
+        expect(() => removeProduct(1)).toThrow()
+    })
 })
 
 describe('getProduct', () => {
-    afterEach(() => {
-        resetProducts();
-    });
+
     it('Should show the product searched by id', () => {
         addProduct('manzana', 2);
         expect(getProduct(1)).toEqual({id:1, name: 'manzana', price: 2})
@@ -69,9 +73,7 @@ describe('getProduct', () => {
 })
 
 describe('updateProduct', () => {
-    afterEach(() => {
-        resetProducts();
-    });
+    
     it('Should update the product', () => {
         addProduct('manzana', 2);
         expect(updateProduct(1, 'pera', 3)).toEqual({id: 1, name: 'pera', price: 3})
